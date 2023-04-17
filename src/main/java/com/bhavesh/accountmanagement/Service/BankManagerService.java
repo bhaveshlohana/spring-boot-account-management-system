@@ -37,10 +37,10 @@ public class BankManagerService {
     public String saveNewAccount(Customer customer) {
         Optional<Customer> customerCheck = customerRepository.findByPanCardNumber(customer.getPanCardNumber());
         if (customerCheck.isEmpty()) {
-            System.out.println("Here in saveNewAccount");
 
             System.out.println("Initialising new User object");
             User user = new User();
+//            user.setUserId(customer.getCustomerId());
             user.setPassword("Temporary1234");
 
             System.out.println("Initialising new Role object");
@@ -48,25 +48,27 @@ public class BankManagerService {
             user.setRole(role);
 
             System.out.println("Saving new user");
-            userRepository.save(user);
+            User savedUser = userRepository.save(user);
             System.out.println("Setting new user");
             customer.setUser(user);
-
+            customer.setCustomerId(savedUser.getUserId());
+            Customer savedCustomer = customerRepository.save(customer);
+            System.out.println("Saving new customer");
 
             Account account = new Account();
             System.out.println("After new Account()");
-            account.setCustomer(customer);
+            account.setCustomer(savedCustomer);
             System.out.println("After Set Customer");
             account.setBalance(0);
             System.out.println("After Set Balance");
             System.out.println(account);
             accountRepository.save(account);
-
             System.out.println("Saving new account");
 
 
-            customerRepository.save(customer);
-            System.out.println("Saving new customer");
+
+
+//            tempCustomer
 
             return "You are our new customer now! Your account has been created with $0 balance. Your User ID is " + user.getUserId() + " and your password is " + user.getPassword() + ". You are requested to change the password quickly.";
 
