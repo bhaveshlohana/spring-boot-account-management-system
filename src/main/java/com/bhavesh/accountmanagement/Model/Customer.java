@@ -1,10 +1,7 @@
 package com.bhavesh.accountmanagement.Model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -13,6 +10,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "customer")
 public class Customer {
@@ -20,18 +18,19 @@ public class Customer {
     // Email, PAN Card, Date of Birth)
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
     private int customerId;
     @Column(nullable = false, unique = true)
-    private int PanCardNumber;
+    private int panCardNumber;
     @Column(nullable = false, unique = true)
-    private int AadhaarNumber;
-    private String Name;
-    private String Address;
+    private int aadhaarNumber;
+    private String name;
+    private String address;
     @Column(nullable = false, unique = true)
-    private String Email;
+    private String email;
     @DateTimeFormat(pattern="dd/MM/yyyy")
-    private Date DOB;
-    @OneToOne
+    private Date dob;
+    @OneToOne(cascade = {CascadeType.ALL})
     private User user;
+
 }
+

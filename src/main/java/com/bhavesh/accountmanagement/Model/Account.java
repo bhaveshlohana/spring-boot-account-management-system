@@ -1,15 +1,13 @@
 package com.bhavesh.accountmanagement.Model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "account")
 public class Account {
@@ -17,7 +15,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private int accountNumber;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     private Customer customer;
     private double balance;
 

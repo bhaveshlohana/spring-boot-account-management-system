@@ -20,7 +20,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     private Role role;
 
 //    public User() {
