@@ -19,9 +19,9 @@ public class Transaction {
     private Integer transactionId;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
-    private Long transactionReferenceNumber;
-    private Long refNumber;
+    @Column(unique = true)
+    private long transactionReferenceNumber;
+    private long refNumber;
     private LocalDateTime transactionDate;
     @Column(columnDefinition = "enum('Debit', 'Credit')")
     private String type;
