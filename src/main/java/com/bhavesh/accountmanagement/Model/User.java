@@ -18,6 +18,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private int userId;
+    @Column(nullable = false)
     private String password;
 
     @ManyToOne

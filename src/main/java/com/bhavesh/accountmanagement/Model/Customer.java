@@ -18,10 +18,13 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private int customerId;
+    @Column(nullable = false, unique = true)
     private int PanCardNumber;
+    @Column(nullable = false, unique = true)
     private int AadhaarNumber;
     private String Name;
     private String Address;
+    @Column(nullable = false, unique = true)
     private String Email;
     @DateTimeFormat(pattern="dd/MM/yyyy")
     private Date DOB;

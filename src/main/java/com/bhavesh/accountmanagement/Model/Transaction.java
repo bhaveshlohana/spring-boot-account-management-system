@@ -17,7 +17,6 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Integer transactionId;
-    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(unique = true)
     private long transactionReferenceNumber;
