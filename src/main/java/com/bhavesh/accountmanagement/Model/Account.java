@@ -11,6 +11,7 @@ import lombok.Setter;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false)
     private int accountNumber;
     @ManyToOne
     private Customer customer;
