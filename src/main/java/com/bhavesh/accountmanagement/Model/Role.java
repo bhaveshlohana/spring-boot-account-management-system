@@ -1,9 +1,6 @@
 package com.bhavesh.accountmanagement.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,8 +14,8 @@ import lombok.Setter;
 @Table(name = "role")
 public class Role {
     @Id
-    @GeneratedValue
-    private Integer roleId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int roleId;
     private String name;
 
 //    public Role(Integer roleId, String name) {

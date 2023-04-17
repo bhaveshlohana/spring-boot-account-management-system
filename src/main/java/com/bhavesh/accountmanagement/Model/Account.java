@@ -10,10 +10,10 @@ import lombok.Setter;
 @Table(name = "account")
 public class Account {
     @Id
-    @GeneratedValue
-    private Integer accountNumber;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int accountNumber;
     @ManyToOne
     private Customer customer;
-    private Double balance;
+    private double balance;
 
 }
