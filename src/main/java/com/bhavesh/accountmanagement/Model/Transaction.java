@@ -19,6 +19,7 @@ public class Transaction {
     private Integer transactionId;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false)
     private Long transactionReferenceNumber;
     private Long refNumber;
     private LocalDateTime transactionDate;
