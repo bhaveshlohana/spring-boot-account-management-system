@@ -4,9 +4,7 @@ import com.bhavesh.accountmanagement.Model.Account;
 import com.bhavesh.accountmanagement.Model.Transaction;
 import com.bhavesh.accountmanagement.Service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,5 +27,20 @@ public class CustomerController {
     @GetMapping("/view-mini-statement/{userId}/{accountNumber}/{startDate}/{endDate}")
     public List<Transaction> getDateSpecificStatement(@PathVariable int userId, @PathVariable int accountNumber, @PathVariable LocalDate startDate, @PathVariable LocalDate endDate) {
         return customerService.getDateSpecificStatement(userId, accountNumber, startDate, endDate);
+    }
+
+    @PostMapping("/cash-deposit/{userId}/{accountNumber}")
+    public String cashDeposit(@PathVariable int userId, @PathVariable int accountNumber, @RequestBody Transaction transaction) {
+        return customerService.cashDeposit(userId, accountNumber, transaction);
+    }
+
+    @PostMapping("/cash-withdrawal/{userId}/{accountNumber}")
+    public String cashWithdrawal(@PathVariable int userId, @PathVariable int accountNumber, @RequestBody Transaction transaction) {
+        return customerService.cashWithdrawal(userId, accountNumber, transaction);
+    }
+
+    @PostMapping("/account-transfer/{userId}/{accountNumber}")
+    public String accountTransfer(@PathVariable int userId, @PathVariable int accountNumber, @RequestBody Transaction transaction) {
+        return customerService.accountTransfer(userId, accountNumber, transaction);
     }
 }
