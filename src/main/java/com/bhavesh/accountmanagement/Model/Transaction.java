@@ -30,7 +30,7 @@ public class Transaction {
     private String type;
     @Column(columnDefinition = "enum('Cash', 'Transfer')")
     private String subType;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     private Account account;
 
 }

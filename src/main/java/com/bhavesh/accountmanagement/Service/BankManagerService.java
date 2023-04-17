@@ -14,13 +14,13 @@ import java.util.Optional;
 @Service
 public class BankManagerService {
     @Autowired
-    private AccountRepository accountRepository;
+    AccountRepository accountRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    CustomerRepository customerRepository;
 
     public String findCustomerByPanCardNumber(int panCardNumber) {
         Optional<Customer> customer = customerRepository.findByPanCardNumber(panCardNumber);
@@ -33,29 +33,43 @@ public class BankManagerService {
     public String saveNewAccount(Customer customer) {
         Optional<Customer> customerCheck = customerRepository.findByPanCardNumber(customer.getPanCardNumber());
         if (customerCheck.isEmpty()) {
+            System.out.println("Here in saveNewAccount");
 
-            Account account = new Account();
-            account.setCustomer(customer);
-            account.setBalance(0);
-            accountRepository.save(account);
-
+            System.out.println("Initialising new User object");
             User user = new User();
             user.setUserId(customer.getCustomerId());
             user.setPassword("Temporary1234");
 
+            System.out.println("Initialising new Role object");
             Role role = new Role();
             role.setRoleId(2);
             user.setRole(role);
-            userRepository.save(user);
 
+            userRepository.save(user);
+            System.out.println("Saving new user");
             customer.setUser(user);
+
+
+            Account account = new Account();
+            System.out.println("After new Account()");
+            account.setCustomer(customer);
+            System.out.println("After Set Customer");
+            account.setBalance(0);
+            System.out.println("After Set Balance");
+            accountRepository.save(account);
+            System.out.println(account);
+            System.out.println("Saving new account");
+
+
             customerRepository.save(customer);
+            System.out.println("Saving new customer");
 
             return "You are our new customer now! Your account has been created with $0 balance. Your User ID is " + user.getUserId() + "and your password is " + user.getPassword() + ". You are requested to change the password quickly.";
 
         } else {
+            Customer tempCustomer = customerRepository.findById(customer.getCustomerId()).get();
             Account account = new Account();
-            account.setCustomer(customer);
+            account.setCustomer(tempCustomer);
             account.setBalance(0);
             accountRepository.save(account);
             return "You are our existing customer! Your account has been created with $0 balance.";
