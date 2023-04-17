@@ -1,9 +1,6 @@
 package com.bhavesh.accountmanagement.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,7 +15,7 @@ public class Customer {
     //(Customer ID, PAN Card, Aadhar Number, Name, Postal Address,
     // Email, PAN Card, Date of Birth)
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int customerId;
     private int PanCardNumber;
     private int AadhaarNumber;
