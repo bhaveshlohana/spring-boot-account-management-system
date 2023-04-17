@@ -15,7 +15,7 @@ import lombok.Setter;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private int userId;
     @Column(nullable = false)
@@ -24,36 +24,4 @@ public class User {
     @ManyToOne(cascade = {CascadeType.ALL})
     private Role role;
 
-//    public User() {
-//    }
-//
-//    public User(Integer userId, String password, Role role) {
-//        this.userId = userId;
-//        this.password = password;
-//        this.role = role;
-//    }
-//
-//    public Integer getUserId() {
-//        return userId;
-//    }
-//
-//    public void setUserId(Integer userId) {
-//        this.userId = userId;
-//    }
-//
-//    public String getPassword() {
-//        return password;
-//    }
-//
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
-//
-//    public Role getRole() {
-//        return role;
-//    }
-//
-//    public void setRole(Role role) {
-//        this.role = role;
-//    }
 }

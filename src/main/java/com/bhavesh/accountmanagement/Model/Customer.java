@@ -17,7 +17,7 @@ public class Customer {
     //(Customer ID, PAN Card, Aadhar Number, Name, Postal Address,
     // Email, PAN Card, Date of Birth)
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int customerId;
     @Column(nullable = false, unique = true)
     private int panCardNumber;

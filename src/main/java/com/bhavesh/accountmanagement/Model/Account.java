@@ -12,7 +12,7 @@ import lombok.*;
 @Table(name = "account")
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int accountNumber;
     @ManyToOne(cascade = {CascadeType.ALL})
     private Customer customer;
