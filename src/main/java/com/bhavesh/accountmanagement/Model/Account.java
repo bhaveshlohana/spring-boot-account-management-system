@@ -13,7 +13,6 @@ import lombok.*;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
     private int accountNumber;
     @ManyToOne(cascade = {CascadeType.ALL})
     private Customer customer;
