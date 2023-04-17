@@ -41,7 +41,6 @@ public class BankManagerService {
 
             System.out.println("Initialising new User object");
             User user = new User();
-            user.setUserId(customer.getCustomerId());
             user.setPassword("Temporary1234");
 
             System.out.println("Initialising new Role object");
