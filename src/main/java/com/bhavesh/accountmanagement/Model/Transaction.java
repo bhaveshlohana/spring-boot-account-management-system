@@ -18,10 +18,10 @@ public class Transaction {
 //     (Transaction ID, Transaction reference number, Date Time,
 //    Type (Debit/Credit), SubType (Cash/Transfer), Current Balance
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer transactionId;
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true)
     private long transactionReferenceNumber;
     private long refNumber;
