@@ -16,6 +16,7 @@ public class Customer {
     // Email, PAN Card, Date of Birth)
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false)
     private int customerId;
     private int PanCardNumber;
     private int AadhaarNumber;
