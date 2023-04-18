@@ -37,7 +37,7 @@ public class CustomerService {
         Customer customer = getCustomerDetails(userId);
         List<Account> accounts = new ArrayList<>();
         accountRepository.findByCustomerCustomerId(customer.getCustomerId()).forEach(accounts::add);
-//        userId is same as customerId
+//        userId is the same as customerId
 //        accountRepository.findByCustomerCustomerId(userId).forEach(accounts::add);
         return accounts;
     }
@@ -94,12 +94,14 @@ public class CustomerService {
     }
 
     public String cashWithdrawal(int userId, int accountNumber, Transaction transaction) {
-        Customer customer = getCustomerDetails(userId);
+//        Customer customer = getCustomerDetails(userId);
         Optional<Account> accountOptional  = accountRepository.findById(accountNumber);
 
         if  (accountOptional.isPresent() && transaction.getAmount()>0) {
-//            List<Transaction> transactionsOccuredToday = getDateSpecificStatement(userId, accountNumber, LocalDate.now().atStartOfDay().toLocalDate(), LocalDate.now().atTime(LocalTime.MAX).toLocalDate());
-//            double totalWithdrawal = transactionsOccuredToday.stream()
+//            List<Transaction> transactionsOccurredToday = getDateSpecificStatement(userId, accountNumber,
+//            LocalDate.now().atStartOfDay().toLocalDate(),
+//            LocalDate.now().atTime(LocalTime.MAX).toLocalDate());
+//            double totalWithdrawal = transactionsOccurredToday.stream()
 //                    .filter(t -> t.getType().equals("Debit") && t.getSubType().equals("Cash"))
 //                    .mapToDouble(Transaction::getAmount)
 //                    .sum();
@@ -107,12 +109,12 @@ public class CustomerService {
             double amountWithdrawnToday = getAmountWithdrawnToday(accountNumber);
             System.out.println("Amount withdrawn today: "+amountWithdrawnToday);
             // Check if withdrawal amount exceeds daily limit
-            if (amountWithdrawnToday > 10000) {
+            if (amountWithdrawnToday == 10000) {
                 throw new RuntimeException("Withdrawal limit exceeded");
             }
             if (amountWithdrawnToday + transaction.getAmount() > 10000) {
                 double amountThatCanBeWithdrawnToday = 10000 - amountWithdrawnToday;
-                return "The amount you are withdrawing way too much as you are close to exceed the daily withdrawal limit. You can only withdraw " + amountThatCanBeWithdrawnToday + " Rupees today.";
+                return "The amount you are withdrawing way too much as you are close to exceed the daily withdrawal limit. You can only withdraw ₹" + amountThatCanBeWithdrawnToday + " today.";
             }
 //            Transaction newTransaction = new Transaction();
             Account account = accountOptional.get();

@@ -8,6 +8,8 @@ import com.bhavesh.accountmanagement.Model.Account;
 import com.bhavesh.accountmanagement.Model.Customer;
 import com.bhavesh.accountmanagement.Model.Role;
 import com.bhavesh.accountmanagement.Model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,8 @@ public class BankManagerService {
 
     @Autowired
     RoleRepository roleRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(BankManagerService.class);
 
     public String findCustomerByPanCardNumber(int panCardNumber) {
         Optional<Customer> customer = customerRepository.findByPanCardNumber(panCardNumber);
@@ -65,12 +69,7 @@ public class BankManagerService {
             accountRepository.save(account);
             System.out.println("Saving new account");
 
-
-
-
-//            tempCustomer
-
-            return "You are our new customer now! Your account has been created with $0 balance. Your User ID is " + user.getUserId() + " and your password is " + user.getPassword() + ". You are requested to change the password quickly.";
+            return "You are our new customer now! Your account has been created with ₹0 balance. Your User ID is " + user.getUserId() + " and your password is " + user.getPassword() + ". You are requested to change the password quickly.";
 
         } else {
             Customer tempCustomer;
