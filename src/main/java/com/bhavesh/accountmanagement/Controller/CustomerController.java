@@ -24,9 +24,14 @@ public class CustomerController {
         return customerService.getMiniStatement(userId, accountNumber);
     }
 
-    @GetMapping("/view-mini-statement/{userId}/{accountNumber}/{startDate}/{endDate}")
+    @GetMapping("/view-date-specific-statement/{userId}/{accountNumber}/{startDate}/{endDate}")
     public List<Transaction> getDateSpecificStatement(@PathVariable int userId, @PathVariable int accountNumber, @PathVariable LocalDate startDate, @PathVariable LocalDate endDate) {
         return customerService.getDateSpecificStatement(userId, accountNumber, startDate, endDate);
+    }
+
+    @GetMapping("/amount-withdrawn-today/{userId}/{accountNumber}")
+    public double getAmountWithdrawnToday(@PathVariable int accountNumber) {
+        return customerService.getAmountWithdrawnToday(accountNumber);
     }
 
     @PostMapping("/cash-deposit/{userId}/{accountNumber}")
@@ -43,4 +48,6 @@ public class CustomerController {
     public String accountTransfer(@PathVariable int userId, @PathVariable int accountNumber, @RequestBody Transaction transaction) {
         return customerService.accountTransfer(userId, accountNumber, transaction);
     }
+
+
 }
