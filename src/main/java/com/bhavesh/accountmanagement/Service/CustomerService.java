@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +30,7 @@ public class CustomerService {
     TransactionRepository transactionRepository;
 
     public Customer getCustomerDetails(int userId) {
-        return customerRepository.findByUserUserId(userId).get();
+        return customerRepository.findByUserUserId(userId).orElse(null);
     }
 
     public List<Account> getAllLinkedAccounts(int userId) {
@@ -53,12 +52,17 @@ public class CustomerService {
     }
 
     public List<Transaction> getDateSpecificStatement(int userId, int accountNumber, LocalDate startDate, LocalDate endDate) {
+        endDate = endDate.plusDays(1);
         List<Transaction> transactions = transactionRepository.findByAccountAccountNumber(accountNumber);
-
+//        System.out.println("Unfiltered transactions");
+//        transactions.forEach(t -> System.out.println(t.toString()));
+        LocalDate finalEndDate = endDate;
         List<Transaction> filteredTransactions = transactions.stream()
-                .filter(t -> t.getTransactionDate().isAfter(startDate.atStartOfDay()) && t.getTransactionDate().isBefore(endDate.atStartOfDay()))
+                .filter(t -> t.getTransactionDate().toLocalDate().isAfter(startDate) && t.getTransactionDate().toLocalDate().isBefore(finalEndDate))
                 .collect(Collectors.toList());
-
+//        System.out.println("Filtered transactions");
+//        filteredTransactions.forEach(t -> System.out.println(t.toString()));
+//        List<Transaction> filteredTransactions = transactionRepository.findByTransactionDateBetween(accountNumber, startDate, endDate);
         return filteredTransactions;
 
     }
@@ -70,7 +74,7 @@ public class CustomerService {
         if  (accountOptional.isPresent() && transaction.getAmount()>0) {
 //            Transaction newTransaction = new Transaction();
             Account account = accountOptional.get();
-            long transactionReferenceNumber = generateTransactionReferenceNumber();;
+            long transactionReferenceNumber = generateTransactionReferenceNumber();
             transaction.setTransactionReferenceNumber(transactionReferenceNumber);
             LocalDateTime current = generateCurrentLocalDateTime();
             transaction.setTransactionDate(current);
@@ -94,19 +98,25 @@ public class CustomerService {
         Optional<Account> accountOptional  = accountRepository.findById(accountNumber);
 
         if  (accountOptional.isPresent() && transaction.getAmount()>0) {
-            List<Transaction> transactionsOccuredToday = getDateSpecificStatement(userId, accountNumber, LocalDate.now().atStartOfDay().toLocalDate(), LocalDate.now().atTime(LocalTime.MAX).toLocalDate());
-            double totalWithdrawal = transactionsOccuredToday.stream()
-                    .filter(t -> t.getType().equals("Debit") && t.getSubType().equals("Cash"))
-                    .mapToDouble(Transaction::getAmount)
-                    .sum();
+//            List<Transaction> transactionsOccuredToday = getDateSpecificStatement(userId, accountNumber, LocalDate.now().atStartOfDay().toLocalDate(), LocalDate.now().atTime(LocalTime.MAX).toLocalDate());
+//            double totalWithdrawal = transactionsOccuredToday.stream()
+//                    .filter(t -> t.getType().equals("Debit") && t.getSubType().equals("Cash"))
+//                    .mapToDouble(Transaction::getAmount)
+//                    .sum();
 
+            double amountWithdrawnToday = getAmountWithdrawnToday(accountNumber);
+            System.out.println("Amount withdrawn today: "+amountWithdrawnToday);
             // Check if withdrawal amount exceeds daily limit
-            if (totalWithdrawal + transaction.getAmount() > 10000) {
+            if (amountWithdrawnToday > 10000) {
                 throw new RuntimeException("Withdrawal limit exceeded");
+            }
+            if (amountWithdrawnToday + transaction.getAmount() > 10000) {
+                double amountThatCanBeWithdrawnToday = 10000 - amountWithdrawnToday;
+                return "The amount you are withdrawing way too much as you are close to exceed the daily withdrawal limit. You can only withdraw " + amountThatCanBeWithdrawnToday + " Rupees today.";
             }
 //            Transaction newTransaction = new Transaction();
             Account account = accountOptional.get();
-            long transactionReferenceNumber = generateTransactionReferenceNumber();;
+            long transactionReferenceNumber = generateTransactionReferenceNumber();
             transaction.setTransactionReferenceNumber(transactionReferenceNumber);
             LocalDateTime current = generateCurrentLocalDateTime();
             transaction.setTransactionDate(current);
@@ -136,7 +146,7 @@ public class CustomerService {
         if  (fromAccountOptional.isPresent() && toAccountOptional.isPresent() && fromTransaction.getAmount()>0) {
 //            Transaction newTransaction = new Transaction();
             Account fromAccount = fromAccountOptional.get();
-            long fromTransactionReferenceNumber = generateTransactionReferenceNumber();;
+            long fromTransactionReferenceNumber = generateTransactionReferenceNumber();
             fromTransaction.setTransactionReferenceNumber(fromTransactionReferenceNumber);
             LocalDateTime fromTransactionCurrent = generateCurrentLocalDateTime();
             fromTransaction.setTransactionDate(fromTransactionCurrent);
@@ -145,7 +155,7 @@ public class CustomerService {
             double fromAmount = fromTransaction.getAmount();
             double fromBalance = fromAccount.getBalance();
             double fromNewBalance = fromBalance - fromAmount;
-            if(fromNewBalance < 1000 || fromAmount > fromBalance) {
+            if(fromNewBalance < 1000) {
                 return "Transaction Failed. Insufficient balance! Please try again with lesser amount.";
             }
             fromTransaction.setBalance(fromNewBalance);
@@ -164,7 +174,8 @@ public class CustomerService {
             toTransaction.setSubType("Transfer");
             double toAmount = fromTransaction.getAmount();
             double toBalance = toAccount.getBalance();
-            double toNewBalance = toBalance - toAmount;
+            double toNewBalance = toBalance + toAmount;
+            toTransaction.setAmount(toAmount);
             toTransaction.setBalance(toNewBalance);
             toAccount.setBalance(toNewBalance);
             Account savedToAccount = accountRepository.save(toAccount);
@@ -188,5 +199,15 @@ public class CustomerService {
 
     public LocalDateTime generateCurrentLocalDateTime(){
         return LocalDateTime.now(ZoneId.of("Asia/Kolkata"));
+    }
+
+    public double getAmountWithdrawnToday(int accountNumber) {
+        LocalDate currentDate = LocalDate.now().atStartOfDay().toLocalDate();
+        List<Transaction> transactions = transactionRepository.findByAccountAccountNumber(accountNumber);
+        double amountWithdrawnToday = transactions.stream()
+                .filter(t -> t.getTransactionDate().toLocalDate().isEqual(currentDate) && t.getType().equals("Debit") && t.getSubType().equals("Cash"))
+                .mapToDouble(Transaction::getAmount)
+                .sum();
+        return amountWithdrawnToday;
     }
 }
