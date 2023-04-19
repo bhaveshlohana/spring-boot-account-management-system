@@ -6,6 +6,7 @@ import com.bhavesh.accountmanagement.DAO.TransactionRepository;
 import com.bhavesh.accountmanagement.Model.Account;
 import com.bhavesh.accountmanagement.Model.Customer;
 import com.bhavesh.accountmanagement.Model.Transaction;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +63,7 @@ public class CustomerService {
                 .collect(Collectors.toList());
 //        System.out.println("Filtered transactions");
 //        filteredTransactions.forEach(t -> System.out.println(t.toString()));
-//        List<Transaction> filteredTransactions = transactionRepository.findByTransactionDateBetween(accountNumber, startDate, endDate);
+//        List<Transaction> filteredTransactions = transactionRepository.findByTransactionDateBetween(accountNumber, startDate, finalEndDate);
         return filteredTransactions;
 
     }
@@ -212,4 +213,9 @@ public class CustomerService {
                 .sum();
         return amountWithdrawnToday;
     }
+    
+//    @PostConstruct
+//    public void init() {
+//        System.out.println(transactionRepository.findTotalAmount());
+//    }
 }

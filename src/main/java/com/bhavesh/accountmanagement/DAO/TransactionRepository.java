@@ -11,6 +11,9 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
     List<Transaction> findByAccountAccountNumber(int accountNumber);
 
-//    @Query("SELECT t.* FROM transaction as t WHERE account_account_number=:accountNumber AND DATE(t.transaction_date) BETWEEN :startDate AND DATE_ADD(:endDate, INTERVAL 1 DAY)")
+//    @Query("SELECT t.* FROM transaction as t WHERE account_account_number=(:accountNumber) AND DATE(t.transaction_date) BETWEEN (:startDate) AND DATE_ADD((:endDate), INTERVAL 1 DAY)")
 //    List<Transaction> findByTransactionDateBetween(@Param("accountNumber") int accountNumber, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+//    @Query("SELECT t.amount from transaction as t")
+//    List<Transaction> findTotalAmount();
 }
